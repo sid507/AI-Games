@@ -46,7 +46,7 @@ def drawrec(p,img,speed,b,g,r):
 
         cv2.rectangle(img,(p[i][0],p[i][4]),(p[i][1],p[i][4]+20),(0,0,0),-1)
         cv2.rectangle(img,(p[i][0]+20,p[i][4]+20),(p[i][1]-20,640),(b,g,r),-1)
-        score='Score'+str(speed)
+        score='Score'+str(speed-4)
         cv2.putText(img,score,(300,100),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,0),2,cv2.LINE_AA)
 
     return img
@@ -97,7 +97,7 @@ while True:
             cv2.rectangle(img,(x+w//2-10,y+h//2-10),(x+w//2+10,y+h//2+10),(0,255,0),-1)
             q=[x+w//2-10,x+w//2+10,y+h//2-10,y+h//2+10]    
             cv2.putText(img,'No Face Detected',(50,50),cv2.FONT_HERSHEY_DUPLEX,1,(0,25,255),2,cv2.LINE_AA)
-            cv2.imshow('sd',img)
+            cv2.imshow('Flying Face',img)
     if not check(p,q):
         crash=True
       
