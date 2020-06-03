@@ -40,25 +40,25 @@ def drawrec(p,img,speed,b,g,r):
         p[i][0]=p[i][0]+speed
         p[i][1]=p[i][1]+speed
         # print(p[i][0])
-        cv2.rectangle(img,(p[i][0],p[i][2]),(p[i][1],p[i][3]),(b,g,r),-1)
-        cv2.rectangle(img,(p[i][0],p[i][4]),(p[i][1],640),(b,g,r),-1)
+        cv2.rectangle(img,(p[i][0]+20,p[i][2]),(p[i][1]-20,p[i][3]-20),(b,g,r),-1)
+
+        cv2.rectangle(img,(p[i][0],p[i][3]-20),(p[i][1],p[i][3]),(0,0,0),-1)
+
+        cv2.rectangle(img,(p[i][0],p[i][4]),(p[i][1],p[i][4]+20),(0,0,0),-1)
+        cv2.rectangle(img,(p[i][0]+20,p[i][4]+20),(p[i][1]-20,640),(b,g,r),-1)
+        score='Score'+str(speed)
+        cv2.putText(img,score,(300,100),cv2.FONT_HERSHEY_COMPLEX,2,(0,0,0),2,cv2.LINE_AA)
 
     return img
 
 def check(p,q):
-    if q!=[]:
-        for i in range(len(p)):
-            # print('p',p)
-            
-            if q[0]>p[i][0] and q[1]<p[i][1]:
-                # print('q1',q[0],q[1])
-                if q[2]<p[i][3] or q[3]>p[i][4]:
-                    # print('q2',q[2],q[3])
-                    return False
-        return True
-    else:
-        print('No face detected')
-        return False
+    for i in range(len(p)):
+        if q!=[] and q[0]>p[i][0] and q[1]<p[i][1]:
+            # print('q1',q[0],q[1])
+            if q[2]<p[i][3] or q[3]>p[i][4]:
+                # print('q2',q[2],q[3])
+                return False
+    return True
 
 p=initialize()
 time_=0
@@ -80,9 +80,26 @@ while True:
         roi_color = img[y+int(0.2*y):y+h, x:x+w]
         cv2.rectangle(img,(x+w//2-10,y+h//2-10),(x+w//2+10,y+h//2+10),(0,255,0),-1)
         q=[x+w//2-10,x+w//2+10,y+h//2-10,y+h//2+10]
+    while q==[]:
         
-        if not check(p,q):
-            crash=True
+        
+        _,img=cap.read()
+        imggray=cv2.cvtColor(img,cv2.COLOR_BGR2GRAY)
+        faces=face_cascade.detectMultiScale(imggray,1.3,5)
+
+        for (x,y,w,h) in faces:
+            img = cv2.rectangle(img,(x,y),(x+w,y+h),(255,0,0),2)
+            roi_gray = imggray[y:y+h, x:x+w]
+            roi_color = img[y+int(0.2*y):y+h, x:x+w]
+            # nose=nosecas.detectMultiScale(roi_gray)
+            # for (ex,ey,ew,eh) in nose:
+            #     cv2.rectangle(roi_color,(ex,ey),(ex+int(ew*0.5),ey+int(eh*0.5)),(0,255,0),-1)
+            cv2.rectangle(img,(x+w//2-10,y+h//2-10),(x+w//2+10,y+h//2+10),(0,255,0),-1)
+            q=[x+w//2-10,x+w//2+10,y+h//2-10,y+h//2+10]    
+            cv2.putText(img,'No Face Detected',(50,50),cv2.FONT_HERSHEY_DUPLEX,1,(0,25,255),2,cv2.LINE_AA)
+            cv2.imshow('sd',img)
+    if not check(p,q):
+        crash=True
       
     addbars(p)
     time_=time_+1
