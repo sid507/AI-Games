@@ -97,7 +97,7 @@ while True:
             cv2.rectangle(img,(x+w//2-10,y+h//2-10),(x+w//2+10,y+h//2+10),(0,255,0),-1)
             q=[x+w//2-10,x+w//2+10,y+h//2-10,y+h//2+10]    
             cv2.putText(img,'No Face Detected',(50,50),cv2.FONT_HERSHEY_DUPLEX,1,(0,25,255),2,cv2.LINE_AA)
-            cv2.imshow('sd',img)
+            cv2.imshow('Flying Face',img)
     if not check(p,q):
         crash=True
       
